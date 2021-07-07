@@ -1,5 +1,10 @@
 const path = require('path');
-const exphbs = require('express-handlebars')
+const exphbs = require('express-handlebars');
+const morgan = require('morgan');
+const multer = require('multer');
+const express =  require('express');
+const errorHandler =  require('errorHandler')
+const routes = require('../routes/index');
 module.exports = (app)=>{
     // setting
     app.set('port', process.env.PORT|| 3000);
@@ -13,7 +18,17 @@ module.exports = (app)=>{
     }))
     app.set('view engine','.hbs')
     // middlewares
+    app.use(morgan('dev'))
+    app.use(multer({dest: path.join(__dirname,'../public/upload/temp')}).single('image'))
+    app.use(express.json());
+    app.use(express.urlencoded({extended:false}));
     // routes
+    routes(app);
+    // Static files
+    app.use('/public',express.static(path.join(__dirname,'../public'))) // Colocamos un nombre al principio para que nuestra carpeta public pueda ser accedida desde el navegador
     // errorhandlers
+    if('deveploment'===app.get('env',)){
+        app.use(errorHandler);
+    }
     return app;
 }
