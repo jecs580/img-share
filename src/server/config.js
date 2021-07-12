@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const multer = require('multer');
 const express =  require('express');
 const errorHandler =  require('errorHandler')
-const routes = require('../routes/index');
+const routes = require('../routes');
 module.exports = (app)=>{
     // setting
     app.set('port', process.env.PORT|| 3000);
