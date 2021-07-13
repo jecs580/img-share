@@ -17,7 +17,7 @@ ctrl.create = (req,res)=>{
             saveImage();
         }else{
             const ext = path.extname(req.file.originalname).toLowerCase();
-            const targetPath = path.resolve(`src/public/upload/${imageName}.${ext}`);
+            const targetPath = path.resolve(`src/public/upload/${imageName}${ext}`);
             if(ext ==='.png'|| ext === '.jpg'|| ext==='.jpeg' || ext ==='.gif'){
                 await fs.rename(imageTempPath,targetPath);
                 const newImage = new Image({
