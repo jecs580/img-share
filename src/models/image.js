@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 const {Schema} = mongoose;
 const path =  require('path')
 const ImageSchema= new Schema({
@@ -11,7 +12,7 @@ const ImageSchema= new Schema({
 });
 ImageSchema.virtual('uniqueId')
     .get(function(){
-        return this.filename.replace(path.extname(this.filename),'')
+        return this.filename.replace(path.extname(this.filename),'');
     });
-
+    ImageSchema.plugin(mongooseLeanVirtuals);
 module.exports = mongoose.model('Image',ImageSchema);

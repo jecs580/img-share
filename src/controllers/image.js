@@ -5,8 +5,10 @@ const {Image} = require('../models');
 
 const ctrl  = {};
 
-ctrl.index = (req,res)=>{
-    
+ctrl.index = async(req,res)=>{
+    const id = req.params['image_id'];
+    const image = await Image.findOne({filename:{$regex: id}}).lean();
+    res.render('image', {image});
 };
 ctrl.create = (req,res)=>{
     const saveImage = async ()=>{
