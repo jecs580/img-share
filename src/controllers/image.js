@@ -7,9 +7,17 @@ const ctrl  = {};
 
 ctrl.index = async(req,res)=>{
     const id = req.params['image_id'];
-    const image = await Image.findOne({filename:{$regex: id}}).lean(({ virtuals: true }));
-    const comments = await Comment.find({image_id: image._id}).lean(({ virtuals: true }));
-    res.render('image', {image, comments});
+    const image2 = await Image.findOne({filename:{$regex: id}});
+   if(image2){
+        image2.views = image2.views+1;
+        await image2.save();
+        console.log(image2);
+        const image = await Image.findOne({filename:{$regex: id}}).lean(({ virtuals: true }));
+        const comments = await Comment.find({image_id: image._id}).lean(({ virtuals: true }));
+        res.render('image', {image, comments});
+   }else{
+       res.redirect('/');
+   }
 };
 ctrl.create = (req,res)=>{
     const saveImage = async ()=>{
@@ -53,6 +61,8 @@ ctrl.comment = async (req,res)=>{
         newComment.image_id = image._id;
         await newComment.save();
         res.redirect('/images/'+image.uniqueId)
+    }else{
+        res.redirect('/');
     }
 };
 ctrl.remove = (req,res)=>{
